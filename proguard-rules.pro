@@ -1,0 +1,1 @@
+-keep public class app.revanced.manager.plugin.downloader.example.*
