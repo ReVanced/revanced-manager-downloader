@@ -32,7 +32,7 @@
       {
         "assets": [
           {
-            "path": "build\outputs\apk\release\*.apk",
+            "path": "build/outputs/apk/release/*.apk?(.asc)",
           }
         ],
         successComment: false
