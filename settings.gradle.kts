@@ -1,4 +1,4 @@
-rootProject.name = "revanced-manager-downloader-template"
+rootProject.name = "revanced-manager-apkmirror-downloader"
 
 pluginManagement.repositories {
     gradlePluginPortal()

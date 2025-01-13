@@ -11,18 +11,18 @@ body:
             <source
               width="256px"
               media="(prefers-color-scheme: dark)"
-              srcset="https://raw.githubusercontent.com/revanced/revanced-manager-downloader-template/main/assets/revanced-headline/revanced-headline-vertical-dark.svg"
+              srcset="https://raw.githubusercontent.com/revanced/revanced-manager-apkmirror-downloader/main/assets/revanced-headline/revanced-headline-vertical-dark.svg"
             >
-            <img 
+            <img
               width="256px"
-              src="https://raw.githubusercontent.com/revanced/revanced-manager-downloader-template/main/assets/revanced-headline/revanced-headline-vertical-light.svg"
+              src="https://raw.githubusercontent.com/revanced/revanced-manager-apkmirror-downloader/main/assets/revanced-headline/revanced-headline-vertical-light.svg"
             >
           </picture>
           <br>
           <a href="https://revanced.app/">
              <picture>
-                 <source height="24px" media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/revanced/revanced-manager-downloader-template/main/assets/revanced-logo/revanced-logo.svg" />
-                 <img height="24px" src="https://raw.githubusercontent.com/revanced/revanced-manager-downloader-template/main/assets/revanced-logo/revanced-logo.svg" />
+                 <source height="24px" media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/revanced/revanced-manager-apkmirror-downloader/main/assets/revanced-logo/revanced-logo.svg" />
+                 <img height="24px" src="https://raw.githubusercontent.com/revanced/revanced-manager-apkmirror-downloader/main/assets/revanced-logo/revanced-logo.svg" />
              </picture>
            </a>&nbsp;&nbsp;&nbsp;
            <a href="https://github.com/ReVanced">
@@ -66,12 +66,10 @@ body:
            Continuing the legacy of Vanced
         </p>
 
-        # ReVanced Manager downloader template bug report
-
         Before creating a new bug report, please keep the following in mind:
 
-        - **Do not submit a duplicate bug report**: Search for existing bug reports [here](https://github.com/ReVanced/revanced-manager-downloader-template/issues?q=label%3A%22Bug+report%22).
-        - **Review the contribution guidelines**: Make sure your bug report adheres to it. You can find the guidelines [here](https://github.com/ReVanced/revanced-manager-downloader-template/blob/main/CONTRIBUTING.md).
+        - **Do not submit a duplicate bug report**: Search for existing bug reports [here](https://github.com/ReVanced/revanced-manager-apkmirror-downloader/issues?q=label%3A%22Bug+report%22).
+        - **Review the contribution guidelines**: Make sure your bug report adheres to it. You can find the guidelines [here](https://github.com/ReVanced/revanced-manager-apkmirror-downloader/blob/main/CONTRIBUTING.md).
         - **Do not use the issue page for support**: If you need help or have questions, check out other platforms on [revanced.app](https://revanced.app).
   - type: textarea
     attributes:
@@ -85,7 +83,7 @@ body:
   - type: textarea
     attributes:
       label: Error logs
-      description: Exceptions can be captured by running `logcat | grep AndroidRuntime` in a shell.
+      description: These can be exported from the Patcher screen or from the Manager settings.
       render: shell
   - type: textarea
     attributes:

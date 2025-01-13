@@ -10,7 +10,7 @@ dependencies {
 }
 
 android {
-    val packageName = "app.revanced.manager.plugin.downloader.example"
+    val packageName = "app.revanced.manager.plugin.downloader.apkmirror"
 
     namespace = packageName
     compileSdk = 35

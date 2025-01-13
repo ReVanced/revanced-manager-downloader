@@ -1,1 +1,1 @@
--keep public class app.revanced.manager.plugin.downloader.example.*
+-keep public class app.revanced.manager.plugin.downloader.apkmirror.*

@@ -5,7 +5,7 @@
       media="(prefers-color-scheme: dark)"
       srcset="assets/revanced-headline/revanced-headline-vertical-dark.svg"
     >
-    <img 
+    <img
       width="256px"
       src="assets/revanced-headline/revanced-headline-vertical-light.svg"
     >
@@ -58,70 +58,34 @@
    Continuing the legacy of Vanced
 </p>
 
-# 👋🔌 ReVanced Manager downloader template
+# 👋🔌 ReVanced Manager APKMirror downloader
 
-![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/ReVanced/revanced-manager-downloader-template/release.yml)
+![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/ReVanced/revanced-manager-apkmirror-downloader/release.yml)
 ![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-yellow.svg)
 
-Template repository for ReVanced Manager downloader plugins.
-
-## ❓ About
-
-This is a template to create a new ReVanced Manager downloader repository. An example implementation is included.
-
-##  🚀 Get started
-
-To start using this template, follow these steps:
-
-1. [Create a new repository using this template](https://github.com/new?template_name=revanced-manager-downloader-template&template_owner=ReVanced)
-2. Set up the [build.gradle.kts](build.gradle.kts) file (Specifically, the [package nme](build.gradle.kts#L21).
-3. Update dependencies in the [libs.versions.toml](gradle/libs.versions.toml) file
-4. [Create a pass-phrased GPG master key and subkey](https://mikeross.xyz/create-gpg-key-pair-with-subkeys/)
-   1. Add the private key as a secret named [GPG_PRIVATE_KEY](.github/workflows/release.yml#L51) to your repository
-   2. Add the passphrase as a secret named [GPG_PASSPHRASE](.github/workflows/release.yml#L52) to your repository
-   3. Add the fingerprint of the GPG subkey as a secret named [GPG_FINGERPRINT](.github/workflows/release.yml#L53)
-   to your repository
-5. [Generate a keystore](https://developer.android.com/studio/publish/app-signing#generate-key)
-   1. Add the Base64 encoded key store as a secret named [KEYSTORE](.github/workflows/release.yml#L57) to your repository
-   2. Add the keystore password as a secret named [KEYSTORE_PASSWORD](.github/workflows/release.yml#L62) to your repository
-   3. Add the keystore entry alias as a secret named [KEYSTORE_ENTRY_ALIAS](.github/workflows/release.yml#L63) to your repository
-   4. Add the keystore entry password as a secret named [KEYSTORE_ENTRY_PASSWORD](.github/workflows/release.yml#L64) to your repository
-7. Set up the [README.md](README.md) file[^1] (e.g, title, description, license, summary),
-the [issue templates](.github/ISSUE_TEMPLATE)[^2] and the [contribution guidelines](CONTRIBUTING.md)[^3]
-
-🎉 You are now ready to develop and release a ReVanced Manager downloader!
-
-[^1]: [Example README.md file](https://github.com/ReVanced/revanced-manager/blob/main/README.md)
-[^2]: [Example issue templates](https://github.com/ReVanced/revanced-manager/tree/main/.github/ISSUE_TEMPLATE)
-[^3]: [Example contribution guidelines](https://github.com/ReVanced/revanced-manager/blob/main/CONTRIBUTING.md)
+An [APKMirror](https://www.apkmirror.com/) plugin for ReVanced Manager.
 
 ## 🧑‍💻 Usage
 
-To develop and release ReVanced Manager downloader using this template, some things need to be considered:
+- Plugins are managed as Android apps. Download and install the APK file from the releases page.
+- After installing, restart ReVanced Manager and enable the plugin in the settings.
+- The plugin will now be usable.
 
-- Development starts in feature branches. Once a feature branch is ready, it is squashed and merged into the `dev` branch
-- The `dev` branch is merged into the `main` branch once it is ready for release
-- Semantic versioning is used to version ReVanced Manager downloader.
-- Semantic commit messages are used for commits
-- Commits on the `dev` branch and `main` branch are automatically released
-via the [release.yml](.github/workflows/release.yml) workflow, which is also responsible for generating the changelog
-and updating the version of ReVanced Manager downloader. It is triggered by pushing to the `dev` or `main` branch.
-The workflow uses the `publish` task to publish the release.
-- The `publish` task depends on the `assembleRelease` task, so it will be run automatically when publishing a release.
+The plugin works by opening the APKMirror website in an embedded browser. If the search string contains a version, you must select that version. Selecting another version in that situation will cause patching to fail.
 
 ## 📚 Everything else
 
 ### 📙 Contributing
 
-Thank you for considering contributing to ReVanced Manager downloader.  
+Thank you for considering contributing to ReVanced Manager APKMirror downloader.
 You can find the contribution guidelines [here](CONTRIBUTING.md).
 
 ### 🛠️ Building
 
-To build ReVanced Manager downloader template, a Java Development Kit (JDK) and Git must be installed.  
+To build ReVanced Manager downloader template, a Java Development Kit (JDK) and Git must be installed.
 Follow the steps below to build ReVanced Manager downloader template:
 
-1. Run `git clone git@github.com:ReVanced/revanced-manager-downloader-template.git` to clone the repository
+1. Run `git clone git@github.com:ReVanced/revanced-manager-apkmirror-downloader.git` to clone the repository
 2. Run `gradlew assembleRelease` to build the project
 
 > [!NOTE]
@@ -137,9 +101,9 @@ Follow the steps below to build ReVanced Manager downloader template:
 
 ## 📜 Licence
 
-ReVanced Manager downloader template is licensed under the GPLv3 licence.
+This project is licensed under the GPLv3 licence.
 Please see the [license file](LICENSE) for more information.
 [tl;dr](https://www.tldrlegal.com/license/gnu-general-public-license-v3-gpl-3) you may copy, distribute
-and modify ReVanced Manager downloader template as long as you track changes/dates in source files.
-Any modifications to ReVanced Manager downloader template must also be made available under the GPL,
+and modify the plugin as long as you track changes/dates in source files.
+Any modifications must also be made available under the GPL,
 along with build & install instructions.
