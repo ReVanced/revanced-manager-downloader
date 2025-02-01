@@ -1,7 +1,7 @@
 [versions]
 plugin-api = "1.0.0"
 android-gradle-plugin = "8.7.3"
-kotlin = "2.1.0"
+kotlin = "2.1.10"
 
 [libraries]
 plugin-api = { group = "app.revanced", name = "revanced-manager-downloader-api", version.ref = "plugin-api" }
