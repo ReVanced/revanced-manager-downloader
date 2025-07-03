@@ -19,9 +19,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          # Make sure the release step uses its own credentials:
-          # https://github.com/cycjimmy/semantic-release-action#private-packages
-          persist-credentials: false
           submodules: true
 
       - name: Setup Java
@@ -58,14 +55,14 @@ jobs:
         run: |
           echo "${{ secrets.KEYSTORE }}" | base64 --decode > "keystore.jks"}
 
-      - name: Release
+      - name: Semantic Release
+        uses: cycjimmy/semantic-release-action@v4
+        id: release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEYSTORE_ENTRY_ALIAS: ${{ secrets.KEYSTORE_ENTRY_ALIAS }}
           KEYSTORE_ENTRY_PASSWORD: ${{ secrets.KEYSTORE_ENTRY_PASSWORD }}
-        run: |
-          npx semantic-release
 
       - name: Attest
         if: steps.release.outputs.new_release_published == 'true'
