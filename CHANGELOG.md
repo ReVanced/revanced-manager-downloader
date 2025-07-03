@@ -1,3 +1,10 @@
+# [1.1.0-dev.2](https://github.com/ReVanced/revanced-manager-apkmirror-downloader/compare/v1.1.0-dev.1...v1.1.0-dev.2) (2025-07-03)
+
+
+### Bug Fixes
+
+* Fix release workflow ([847bcdb](https://github.com/ReVanced/revanced-manager-apkmirror-downloader/commit/847bcdb8dff27c3a0d012772a9946311cc9825d9))
+
 # [1.1.0-dev.1](https://github.com/ReVanced/revanced-manager-apkmirror-downloader/compare/v1.0.0...v1.1.0-dev.1) (2025-07-03)
 
 
