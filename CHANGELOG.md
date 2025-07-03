@@ -1,3 +1,10 @@
+# [1.1.0-dev.4](https://github.com/ReVanced/revanced-manager-apkmirror-downloader/compare/v1.1.0-dev.3...v1.1.0-dev.4) (2025-07-03)
+
+
+### Bug Fixes
+
+* Add gradle sha256 checksum ([f259821](https://github.com/ReVanced/revanced-manager-apkmirror-downloader/commit/f259821f7c1075aeca89759cc7d73ae93d91922a))
+
 # [1.1.0-dev.3](https://github.com/ReVanced/revanced-manager-apkmirror-downloader/compare/v1.1.0-dev.2...v1.1.0-dev.3) (2025-07-03)
 
 
