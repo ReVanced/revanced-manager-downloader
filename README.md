@@ -58,34 +58,43 @@
    Continuing the legacy of Vanced
 </p>
 
-# 👋🔌 ReVanced Manager APKMirror downloader
+# 👋🔌 ReVanced Manager Downloaders
 
-![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/ReVanced/revanced-manager-apkmirror-downloader/release.yml)
+![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/ReVanced/revanced-manager-downloaders/release.yml)
 ![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-yellow.svg)
 
-An [APKMirror](https://www.apkmirror.com/) plugin for ReVanced Manager.
+The collection of ReVanced downloaders.
 
 ## 🧑‍💻 Usage
 
-- Plugins are managed as Android apps. Download and install the APK file from the releases page.
-- After installing, restart ReVanced Manager and enable the plugin in the settings.
-- The plugin will now be usable.
+- A downloader is managed as Android apps. Download and install the APK file from the releases page.
+- After installing, restart ReVanced Manager and enable the downloader in the settings.
+- The downloader will now be usable.
 
-The plugin works by opening the APKMirror website in an embedded browser. If the search string contains a version, you must select that version. Selecting another version in that situation will cause patching to fail.
+
+### APMMirror Downloader
+This downloader will open an [APKMirror](https://www.apkmirror.com/) page where you can download the apk as you would normally do.
+If the chosen file is a bundle (.apkm file), the downloader will automatically merge it into a .apk file.
+
+### Play Store Downloader
+When you get prompted, log in to Google with your account. After that, you will be able to download apps from the Play Store.
+
+> [!WARNING]
+> Due to technical limitations, it is only possible to download the latest version of the app. If the ReVanced suggested version differs from the latest, the installation will fail.
 
 ## 📚 Everything else
 
 ### 📙 Contributing
 
-Thank you for considering contributing to ReVanced Manager APKMirror downloader.
+Thank you for considering contributing to ReVanced Manager Downloaders.
 You can find the contribution guidelines [here](CONTRIBUTING.md).
 
 ### 🛠️ Building
 
-To build ReVanced Manager downloader template, a Java Development Kit (JDK) and Git must be installed.
-Follow the steps below to build ReVanced Manager downloader template:
+To build ReVanced Manager Downloaders, a Java Development Kit (JDK) and Git must be installed.
+Follow the steps below to build ReVanced Manager Downloaders:
 
-1. Run `git clone git@github.com:ReVanced/revanced-manager-apkmirror-downloader.git` to clone the repository
+1. Run `git clone git@github.com:ReVanced/revanced-manager-downloaders.git` to clone the repository
 2. Run `gradlew assembleRelease` to build the project
 
 > [!NOTE]

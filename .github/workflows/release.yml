@@ -12,6 +12,8 @@ jobs:
     name: Release
     permissions:
       contents: write
+      id-token: write
+      attestations: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -20,7 +22,7 @@ jobs:
           # Make sure the release step uses its own credentials:
           # https://github.com/cycjimmy/semantic-release-action#private-packages
           persist-credentials: false
-          fetch-depth: 0
+          submodules: true
 
       - name: Setup Java
         uses: actions/setup-java@v4
@@ -29,12 +31,12 @@ jobs:
           java-version: "17"
 
       - name: Cache Gradle
-        uses: burrunan/gradle-cache-action@v2
+        uses: burrunan/gradle-cache-action@v3
 
       - name: Build
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: ./gradlew build --no-daemon
+        run: ./gradlew assembleRelease --no-daemon
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -64,3 +66,10 @@ jobs:
           KEYSTORE_ENTRY_PASSWORD: ${{ secrets.KEYSTORE_ENTRY_PASSWORD }}
         run: |
           npx semantic-release
+
+      - name: Attest
+        if: steps.release.outputs.new_release_published == 'true'
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-name: 'ReVanced Downloader ${{ steps.release.outputs.new_release_git_tag }}'
+          subject-path: downloaders/*/build/outputs/apk/release/*.apk

@@ -1,88 +1,110 @@
+import com.android.build.gradle.AppExtension
+import com.android.build.gradle.internal.api.ApkVariantOutputImpl
+import org.gradle.plugins.signing.SigningExtension
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
-    publishing
-    signing
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.kotlin.parcelize) apply false
+    alias(libs.plugins.kotlin.android) apply false
+    alias(libs.plugins.compose.compiler) apply false
 }
 
-dependencies {
-    compileOnly(libs.plugin.api)
-}
-
-android {
-    val packageName = "app.revanced.manager.plugin.downloader.apkmirror"
-
-    namespace = packageName
-    compileSdk = 35
-
-    defaultConfig {
-        applicationId = packageName
-        minSdk = 26
-        targetSdk = 35
-        versionName = version.toString()
-        versionCode = versionName!!.filter { it.isDigit() }.toInt()
-    }
-
-    buildTypes {
-        release {
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro",
-            )
-
-            val keystoreFile = file("keystore.jks")
-            signingConfig =
-                if (keystoreFile.exists()) {
-                    signingConfigs.create("release") {
-                        storeFile = keystoreFile
-                        storePassword = System.getenv("KEYSTORE_PASSWORD")
-                        keyAlias = System.getenv("KEYSTORE_ENTRY_ALIAS")
-                        keyPassword = System.getenv("KEYSTORE_ENTRY_PASSWORD")
-                    }
-                } else {
-                    signingConfigs["debug"]
-                }
-        }
-    }
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-
-    kotlinOptions {
-        jvmTarget = "17"
-    }
-
-    applicationVariants.all {
-        outputs.all {
-            this as com.android.build.gradle.internal.api.ApkVariantOutputImpl
-
-            outputFileName = "${rootProject.name}-$version.apk"
-        }
-    }
-}
-
-tasks {
-    val assembleReleaseSignApk by registering {
-        dependsOn("assembleRelease")
-
-        val apk = layout.buildDirectory.file("outputs/apk/release/${rootProject.name}-$version.apk")
-
-        inputs.file(apk).withPropertyName("input")
-        outputs.file(apk.map { it.asFile.resolveSibling("${it.asFile.name}.asc") })
-
-        doLast {
-            signing {
-                useGpgCmd()
-                sign(*inputs.files.files.toTypedArray())
+subprojects {
+    repositories {
+        google()
+        mavenCentral()
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/revanced/registry")
+            credentials {
+                username = providers.gradleProperty("gpr.user")
+                    .getOrElse(System.getenv("GITHUB_ACTOR"))
+                password =
+                    providers.gradleProperty("gpr.key").getOrElse(System.getenv("GITHUB_TOKEN"))
             }
         }
     }
 
-    // Used by gradle-semantic-release-plugin.
-    // Tracking: https://github.com/KengoTODA/gradle-semantic-release-plugin/issues/435.
-    publish {
-        dependsOn(assembleReleaseSignApk)
+    if (project.path.endsWith("-downloader")) {
+        apply(plugin = "com.android.application")
+        apply(plugin = "org.jetbrains.kotlin.android")
+        apply(plugin = "maven-publish")
+        apply(plugin = "signing")
+
+        dependencies {
+            "compileOnly"(rootProject.libs.plugin.api)
+        }
+
+        configure<AppExtension> {
+            compileSdkVersion(35)
+
+            defaultConfig {
+                minSdk = 26
+                targetSdk = 35
+                versionName = version.toString()
+                versionCode = versionName!!.filter { it.isDigit() }.toInt()
+            }
+
+            buildTypes {
+                getByName("release") {
+                    proguardFiles(
+                        getDefaultProguardFile("proguard-android-optimize.txt"),
+                        "proguard-rules.pro"
+                    )
+
+                    val keystoreFile = file("${rootDir}/keystore.jks")
+                    signingConfig =
+                        if (keystoreFile.exists()) {
+                            signingConfigs.create("release") {
+                                storeFile = keystoreFile
+                                storePassword = System.getenv("KEYSTORE_PASSWORD")
+                                keyAlias = System.getenv("KEYSTORE_ENTRY_ALIAS")
+                                keyPassword = System.getenv("KEYSTORE_ENTRY_PASSWORD")
+                            }
+                        } else {
+                            signingConfigs.getByName("debug")
+                        }
+                }
+            }
+
+            compileOptions {
+                sourceCompatibility = JavaVersion.VERSION_17
+                targetCompatibility = JavaVersion.VERSION_17
+            }
+
+            applicationVariants.all {
+                outputs.all {
+                    this as ApkVariantOutputImpl
+                    outputFileName = "${project.name}-$version.apk"
+                }
+            }
+        }
+
+        tasks.withType<KotlinCompile>().configureEach {
+            kotlinOptions {
+                jvmTarget = "17"
+            }
+        }
+
+        tasks.register("assembleReleaseSignApk") {
+            dependsOn("assembleRelease")
+
+            val apk = layout.buildDirectory.file("outputs/apk/release/${project.name}-$version.apk")
+
+            inputs.file(apk).withPropertyName("input")
+            outputs.file(apk.map { it.asFile.resolveSibling("${it.asFile.name}.asc") })
+
+            doLast {
+                project.configure<SigningExtension> {
+                    useGpgCmd()
+                    sign(*inputs.files.files.toTypedArray())
+                }
+            }
+        }
+
+        tasks.named("publish") {
+            dependsOn("assembleReleaseSignApk")
+        }
     }
 }

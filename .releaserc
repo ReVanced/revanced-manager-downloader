@@ -32,7 +32,10 @@
       {
         "assets": [
           {
-            "path": "build/outputs/apk/release/*.apk?(.asc)",
+            "path": "play-store-downloader/build/outputs/apk/release/play-store-downloader-*.apk?(.asc)",
+          },
+          {
+            "path": "apkmirror-downloader/build/outputs/apk/release/apkmirror-downloader-*.apk?(.asc)",
           }
         ],
         successComment: false
