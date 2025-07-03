@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-feature android:name="app.revanced.manager.plugin.downloader" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        tools:targetApi="34">
+
+        <activity
+            android:name=".ui.AuthActivity"
+            android:exported="true"
+            android:permission="app.revanced.manager.permission.PLUGIN_HOST"
+            android:theme="@android:style/Theme.DeviceDefault" />
+
+        <service
+            android:name=".service.CredentialProviderService"
+            android:exported="true"
+            android:permission="app.revanced.manager.permission.PLUGIN_HOST" />
+
+        <meta-data
+            android:name="app.revanced.manager.plugin.downloader.class"
+            android:value="app.revanced.manager.plugin.downloader.play.store.PlayStorePluginKt" />
+    </application>
+
+</manifest>

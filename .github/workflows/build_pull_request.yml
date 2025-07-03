@@ -23,9 +23,15 @@ jobs:
           java-version: "17"
 
       - name: Cache Gradle
-        uses: burrunan/gradle-cache-action@v2
+        uses: burrunan/gradle-cache-action@v3
 
       - name: Build
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: ./gradlew build --no-daemon
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: revanced-manager-downloaders
+          path: downloaders/*/build/output/apk/release/*.apk

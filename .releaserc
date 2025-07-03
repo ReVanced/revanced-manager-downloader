@@ -32,7 +32,10 @@
       {
         "assets": [
           {
-            "path": "build/outputs/apk/release/*.apk?(.asc)",
+            "path": "play-store/build/outputs/apk/release/revanced-manager-play-store-downloader-*.apk?(.asc)",
+          },
+          {
+            "path": "apkmirror/build/outputs/apk/release/revanced-manager-apkmirror-downloader-*.apk?(.asc)",
           }
         ],
         successComment: false

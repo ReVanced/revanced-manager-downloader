@@ -1,19 +1,24 @@
-rootProject.name = "revanced-manager-apkmirror-downloader"
+rootProject.name = "revanced-manager-downloaders"
 
-pluginManagement.repositories {
-    gradlePluginPortal()
-    google()
-}
-
-dependencyResolutionManagement.repositories {
-    mavenCentral()
-    google()
-    maven {
-        name = "GitHubPackages"
-        url = uri("https://maven.pkg.github.com/revanced/registry")
-        credentials {
-            username = providers.gradleProperty("gpr.user").orNull ?: System.getenv("GITHUB_ACTOR")
-            password = providers.gradleProperty("gpr.key").orNull ?: System.getenv("GITHUB_TOKEN")
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/revanced/registry")
+            credentials {
+                username = providers.gradleProperty("gpr.user").getOrElse(System.getenv("GITHUB_ACTOR"))
+                password = providers.gradleProperty("gpr.key").getOrElse(System.getenv("GITHUB_TOKEN"))
+            }
         }
     }
 }
+
+include(":shared")
+include(":arsclib")
+file("downloaders").listFiles()
+    ?.forEach {
+        include(":${it.name}")
+        project(":${it.name}").projectDir = file("downloaders/${it.name}")
+    }
