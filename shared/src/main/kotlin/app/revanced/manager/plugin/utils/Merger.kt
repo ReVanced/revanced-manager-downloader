@@ -35,7 +35,9 @@ class Merger {
                     arrayOf(
                         AndroidManifest.NAME_requiredSplitTypes,
                         AndroidManifest.NAME_splitTypes
-                    ).forEach(manifestElement::removeAttributesWithName)
+                    ).forEach {
+                        manifestElement.removeAttributeIf{ attribute -> attribute.name == it }
+                    }
 
                     val pattern = "^com\\.android\\.(stamp|vending)\\.".toRegex()
                     applicationElement.removeElementsIf { element ->
