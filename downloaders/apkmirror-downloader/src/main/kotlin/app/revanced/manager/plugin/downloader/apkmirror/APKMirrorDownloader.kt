@@ -15,6 +15,7 @@ import kotlinx.parcelize.Parcelize
 import java.io.File
 import java.net.URI
 import java.nio.file.Files
+import java.util.UUID
 import java.util.zip.ZipFile
 import kotlin.io.path.ExperimentalPathApi
 import kotlin.io.path.deleteRecursively
@@ -22,8 +23,7 @@ import kotlin.io.path.outputStream
 
 @Parcelize
 class ApkMirrorApp(
-    val downloadUrl: DownloadUrl,
-    val packageName: String
+    val downloadUrl: DownloadUrl
 ) : Parcelable
 
 private object ArscLogger : APKLogger {
@@ -56,37 +56,33 @@ val ApkMirrorDownloader = Downloader<ApkMirrorApp> {
                     )
                 }
 
-                with(Uri.Builder()) {
-                    scheme("https")
-                    authority("www.apkmirror.com")
-                    mapOf(
-                        "post_type" to "app_release",
-                        "searchtype" to "apk",
-                        "s" to (version?.let { "$packageName $it" } ?: packageName),
-                        "bundles%5B%5D" to "apk_files" // bundles[]
-                    ).forEach { (key, value) ->
-                        appendQueryParameter(key, value)
-                    }
-
-                    build().toString()
-                }
-            },
-            packageName = packageName
+                Uri.Builder()
+                    .scheme("https")
+                    .authority("www.apkmirror.com")
+                    .appendQueryParameter("post_type", "app_release")
+                    .appendQueryParameter("searchtype", "apk")
+                    .appendQueryParameter("s", version?.let { "$packageName $it" } ?: packageName)
+                    .appendQueryParameter("bundles%5B%5D" /* bundles[] */, "apk_files")
+                    .toString()
+            }
         ) to version
     }
 
     download { app, outputStream ->
         val workingDir = Files.createTempDirectory("apkmirror_dl")
-        val downloadedFile = workingDir.resolve("${app.packageName}.apk").also {
-            it.outputStream().use { output ->
-                app.downloadUrl.toDownloadResult().first.copyTo(output)
-            }
-        }
-
         try {
             if (URI(app.downloadUrl.url).path.substringAfterLast('/').endsWith(".apk")) {
-                Files.copy(downloadedFile, outputStream)
+                val (inputStream, size) = app.downloadUrl.toDownloadResult()
+                inputStream.use {
+                    if (size != null) reportSize(size)
+                    it.copyTo(outputStream)
+                }
             } else {
+                val downloadedFile = workingDir.resolve(UUID.randomUUID().toString()).also {
+                    it.outputStream().use { output ->
+                        app.downloadUrl.toDownloadResult().first.copyTo(output)
+                    }
+                }
                 val xapkWorkingDir = workingDir.resolve("xapk").also { it.toFile().mkdirs() }
 
                 ZipFile(downloadedFile.toString()).use { zip ->
