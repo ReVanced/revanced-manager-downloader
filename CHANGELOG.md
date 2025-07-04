@@ -1,3 +1,10 @@
+# [1.1.0-dev.5](https://github.com/ReVanced/revanced-manager-apkmirror-downloader/compare/v1.1.0-dev.4...v1.1.0-dev.5) (2025-07-04)
+
+
+### Bug Fixes
+
+* Correctly removing bundle attributes from manifest ([6433d98](https://github.com/ReVanced/revanced-manager-apkmirror-downloader/commit/6433d984950582d36d29ef758325d50016a62ae8))
+
 # [1.1.0-dev.4](https://github.com/ReVanced/revanced-manager-apkmirror-downloader/compare/v1.1.0-dev.3...v1.1.0-dev.4) (2025-07-03)
 
 
