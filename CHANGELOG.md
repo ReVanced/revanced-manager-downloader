@@ -1,3 +1,10 @@
+# [1.1.0-dev.6](https://github.com/ReVanced/revanced-manager-downloaders/compare/v1.1.0-dev.5...v1.1.0-dev.6) (2025-07-04)
+
+
+### Bug Fixes
+
+* Showing progress if downloading an APK + minor fixes ([d46f002](https://github.com/ReVanced/revanced-manager-downloaders/commit/d46f002aa234135ad54768d0bdf15eb9d17428c0))
+
 # [1.1.0-dev.5](https://github.com/ReVanced/revanced-manager-apkmirror-downloader/compare/v1.1.0-dev.4...v1.1.0-dev.5) (2025-07-04)
 
 
