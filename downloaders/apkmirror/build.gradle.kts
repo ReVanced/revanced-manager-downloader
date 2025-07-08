@@ -10,7 +10,6 @@ android {
     }
 
     dependencies {
-        implementation(project(":arsclib"))
         implementation(project(":shared"))
     }
 }

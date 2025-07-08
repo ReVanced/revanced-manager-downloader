@@ -67,20 +67,21 @@ The collection of ReVanced downloaders.
 
 ## 🧑‍💻 Usage
 
-- A downloader is managed as Android apps. Download and install the APK file from the releases page.
+- Downloaders are managed as Android apps. Download and install the APK file from the [releases page](https://github.com/ReVanced/revanced-manager-downloaders/releases/).
 - After installing, restart ReVanced Manager and enable the downloader in the settings.
 - The downloader will now be usable.
 
 
 ### APKMirror Downloader
 This downloader will open an [APKMirror](https://www.apkmirror.com/) page where you can download the apk as you would normally do.
-If the chosen file is a bundle (.apkm file), the downloader will automatically merge it into a .apk file.
+If the chosen file is a bundle (`apkm` file), the downloader will automatically merge it into an `apk` file.
 
 ### Play Store Downloader
 When you get prompted, log in to Google with your account. After that, you will be able to download apps from the Play Store.
 
 > [!WARNING]
 > Due to technical limitations, it is only possible to download the latest version of the app. If the suggested version differs from the latest, the installation will fail.
+> This plugin is not officially endorsed by or affiliated with Google. All usage is at your own risk.
 
 ## 📚 Everything else
 

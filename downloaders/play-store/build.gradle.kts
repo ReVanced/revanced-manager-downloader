@@ -12,7 +12,6 @@ android {
 
     dependencies {
         implementation(libs.gplayapi)
-        implementation(project(":arsclib"))
         implementation(project(":shared"))
 
         implementation(libs.ktor.core)

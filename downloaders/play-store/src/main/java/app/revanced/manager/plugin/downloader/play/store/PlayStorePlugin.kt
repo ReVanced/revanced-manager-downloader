@@ -7,11 +7,10 @@ import app.revanced.manager.plugin.downloader.play.store.data.Credentials
 import app.revanced.manager.plugin.downloader.play.store.data.Http
 import app.revanced.manager.plugin.downloader.play.store.service.CredentialProviderService
 import app.revanced.manager.plugin.downloader.play.store.ui.AuthActivity
-import app.revanced.manager.plugin.utils.Merger
+import app.revanced.manager.plugin.shared.Merger
 import com.aurora.gplayapi.data.models.File as GPlayFile
 import com.aurora.gplayapi.helpers.AppDetailsHelper
 import com.aurora.gplayapi.helpers.PurchaseHelper
-import com.reandroid.apk.APKLogger
 import io.ktor.client.request.url
 import kotlinx.parcelize.Parcelize
 import java.nio.file.Files
@@ -24,22 +23,6 @@ import kotlin.io.path.outputStream
 
 private val allowedFileTypes = arrayOf(GPlayFile.FileType.BASE, GPlayFile.FileType.SPLIT)
 const val LOG_TAG = "PlayStorePlugin"
-
-private object ArscLogger : APKLogger {
-    const val TAG = "ARSCLib"
-
-    override fun logMessage(msg: String) {
-        Log.i(TAG, msg)
-    }
-
-    override fun logError(msg: String, tr: Throwable?) {
-        Log.e(TAG, msg, tr)
-    }
-
-    override fun logVerbose(msg: String) {
-        Log.v(TAG, msg)
-    }
-}
 
 @Parcelize
 class GPlayApp(
@@ -109,7 +92,7 @@ val playStoreDownloader = Downloader<GPlayApp> {
             if (apkFiles.size == 1)
                 Files.copy(apkFiles.first(), outputStream)
             else
-                Merger.merge(apkDir, ArscLogger).writeApk(outputStream)
+                Merger.merge(apkDir).writeApk(outputStream)
 
         } finally {
             apkDir.deleteRecursively()

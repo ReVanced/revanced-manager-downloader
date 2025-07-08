@@ -5,6 +5,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.android.library) apply false
     alias(libs.plugins.kotlin.parcelize) apply false
     alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.compose.compiler) apply false
@@ -26,7 +27,7 @@ subprojects {
         }
     }
 
-    if (project.path.endsWith("-downloader")) {
+    if (project.path.startsWith(":downloaders:")) {
         apply(plugin = "com.android.application")
         apply(plugin = "org.jetbrains.kotlin.android")
         apply(plugin = "maven-publish")
@@ -76,7 +77,7 @@ subprojects {
             applicationVariants.all {
                 outputs.all {
                     this as ApkVariantOutputImpl
-                    outputFileName = "${project.name}-$version.apk"
+                    outputFileName = "${project.name}-downloader-$version.apk"
                 }
             }
         }
@@ -90,7 +91,7 @@ subprojects {
         tasks.register("assembleReleaseSignApk") {
             dependsOn("assembleRelease")
 
-            val apk = layout.buildDirectory.file("outputs/apk/release/${project.name}-$version.apk")
+            val apk = layout.buildDirectory.file("outputs/apk/release/${project.name}-downloader-$version.apk")
 
             inputs.file(apk).withPropertyName("input")
             outputs.file(apk.map { it.asFile.resolveSibling("${it.asFile.name}.asc") })

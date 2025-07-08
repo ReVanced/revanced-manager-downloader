@@ -19,6 +19,6 @@ include(":shared")
 include(":arsclib")
 file("downloaders").listFiles()
     ?.forEach {
-        include(":${it.name}")
-        project(":${it.name}").projectDir = file("downloaders/${it.name}")
+        include(":downloaders:${it.name}")
+        project(":downloaders:${it.name}").projectDir = file("downloaders/${it.name}")
     }
