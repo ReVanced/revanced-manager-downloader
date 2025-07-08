@@ -77,7 +77,7 @@ subprojects {
             applicationVariants.all {
                 outputs.all {
                     this as ApkVariantOutputImpl
-                    outputFileName = "${project.name}-downloader-$version.apk"
+                    outputFileName = "revanced-manager-${project.name}-downloader-$version.apk"
                 }
             }
         }
@@ -91,7 +91,7 @@ subprojects {
         tasks.register("assembleReleaseSignApk") {
             dependsOn("assembleRelease")
 
-            val apk = layout.buildDirectory.file("outputs/apk/release/${project.name}-downloader-$version.apk")
+            val apk = layout.buildDirectory.file("outputs/apk/release/revanced-manager-${project.name}-downloader-$version.apk")
 
             inputs.file(apk).withPropertyName("input")
             outputs.file(apk.map { it.asFile.resolveSibling("${it.asFile.name}.asc") })
