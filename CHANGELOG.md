@@ -1,3 +1,10 @@
+# [1.1.0-dev.7](https://github.com/ReVanced/revanced-manager-downloaders/compare/v1.1.0-dev.6...v1.1.0-dev.7) (2025-07-08)
+
+
+### Bug Fixes
+
+* Refactor of shared module + minor fixes ([5f6c7e5](https://github.com/ReVanced/revanced-manager-downloaders/commit/5f6c7e53331d65b18898fb2997e2ff1ab5c30b87))
+
 # [1.1.0-dev.6](https://github.com/ReVanced/revanced-manager-downloaders/compare/v1.1.0-dev.5...v1.1.0-dev.6) (2025-07-04)
 
 
