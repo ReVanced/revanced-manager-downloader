@@ -1,3 +1,10 @@
+# [1.1.0-dev.8](https://github.com/ReVanced/revanced-manager-downloaders/compare/v1.1.0-dev.7...v1.1.0-dev.8) (2025-07-08)
+
+
+### Bug Fixes
+
+* Prefixing APKs with `revanced-manager-` ([f4c91f0](https://github.com/ReVanced/revanced-manager-downloaders/commit/f4c91f0455e19e240a1527ff05f8f987fbf8e054))
+
 # [1.1.0-dev.7](https://github.com/ReVanced/revanced-manager-downloaders/compare/v1.1.0-dev.6...v1.1.0-dev.7) (2025-07-08)
 
 
