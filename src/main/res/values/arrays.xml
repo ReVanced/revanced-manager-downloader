@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="app.revanced.manager.downloader.classes">
+        <item>app.revanced.manager.downloader.apkmirror.APKMirrorDownloaderKt</item>
+    </string-array>
+</resources>

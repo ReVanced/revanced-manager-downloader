@@ -1,10 +1,10 @@
 [versions]
-plugin-api = "1.0.0"
-android-gradle-plugin = "8.7.3"
-kotlin = "2.1.0"
+downloader-api = "1.0.0"
+android-gradle-plugin = "8.11.0"
+kotlin = "2.3.0"
 
 [libraries]
-plugin-api = { group = "app.revanced", name = "revanced-manager-downloader-api", version.ref = "plugin-api" }
+downloader-api = { group = "app.revanced", name = "revanced-manager-downloader-api", version.ref = "downloader-api" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }

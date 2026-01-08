@@ -1,6 +1,6 @@
 @file:Suppress("Unused")
 
-package app.revanced.manager.plugin.downloader.apkmirror
+package app.revanced.manager.downloader.apkmirror
 
 import android.net.Uri
 import app.revanced.manager.plugin.downloader.webview.WebViewDownloader
