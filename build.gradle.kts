@@ -16,7 +16,7 @@ subprojects {
         google()
         mavenCentral()
         maven {
-            name = "GitHubPackages"
+            name = "githubPackages"
             url = uri("https://maven.pkg.github.com/revanced/registry")
             credentials(PasswordCredentials::class)
         }
