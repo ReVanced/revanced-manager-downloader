@@ -16,14 +16,9 @@ subprojects {
         google()
         mavenCentral()
         maven {
-            name = "GitHubPackages"
+            name = "githubPackages"
             url = uri("https://maven.pkg.github.com/revanced/registry")
-            credentials {
-                username = providers.gradleProperty("gpr.user")
-                    .getOrElse(System.getenv("GITHUB_ACTOR"))
-                password =
-                    providers.gradleProperty("gpr.key").getOrElse(System.getenv("GITHUB_TOKEN"))
-            }
+            credentials(PasswordCredentials::class)
         }
     }
 
