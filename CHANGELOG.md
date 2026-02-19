@@ -1,3 +1,10 @@
+# [1.1.0-dev.9](https://github.com/ReVanced/revanced-manager-downloader/compare/v1.1.0-dev.8...v1.1.0-dev.9) (2026-02-19)
+
+
+### Features
+
+* Merge downloaders and update to new API ([#20](https://github.com/ReVanced/revanced-manager-downloader/issues/20)) ([c7c1869](https://github.com/ReVanced/revanced-manager-downloader/commit/c7c186993b7a1e0fc44de7cee80dac203ba52b76))
+
 # [1.1.0-dev.8](https://github.com/ReVanced/revanced-manager-downloaders/compare/v1.1.0-dev.7...v1.1.0-dev.8) (2025-07-08)
 
 
