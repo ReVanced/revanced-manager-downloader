@@ -14,12 +14,3 @@ pluginManagement {
         }
     }
 }
-
-/*
-include(":shared")
-file("downloaders").listFiles()
-    ?.forEach {
-        include(":downloaders:${it.name}")
-        project(":downloaders:${it.name}").projectDir = file("downloaders/${it.name}")
-    }
-*/
