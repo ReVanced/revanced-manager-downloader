@@ -14,11 +14,3 @@ pluginManagement {
         }
     }
 }
-
-include(":shared")
-include(":arsclib")
-file("downloaders").listFiles()
-    ?.forEach {
-        include(":downloaders:${it.name}")
-        project(":downloaders:${it.name}").projectDir = file("downloaders/${it.name}")
-    }
