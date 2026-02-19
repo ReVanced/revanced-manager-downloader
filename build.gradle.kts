@@ -41,7 +41,7 @@ android {
 }
 
 dependencies {
-    "compileOnly"(rootProject.libs.manager.api)
+    "compileOnly"(libs.manager.api)
 
     implementation(libs.gplayapi)
     implementation(libs.arsclib)
@@ -100,12 +100,6 @@ configure<AppExtension> {
             this as ApkVariantOutputImpl
             outputFileName = "revanced-manager-downloaders-$version.apk"
         }
-    }
-}
-
-tasks.withType<KotlinCompile>().configureEach {
-    kotlinOptions {
-        jvmTarget = "17"
     }
 }
 
