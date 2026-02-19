@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-feature android:name="app.revanced.manager.plugin.downloader" />
+    <uses-feature android:name="app.revanced.manager.downloader" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -13,17 +13,17 @@
         <activity
             android:name=".ui.AuthActivity"
             android:exported="true"
-            android:permission="app.revanced.manager.permission.PLUGIN_HOST"
+            android:permission="app.revanced.manager.permission.DOWNLOADER_HOST"
             android:theme="@android:style/Theme.DeviceDefault" />
 
         <service
             android:name=".service.CredentialProviderService"
             android:exported="true"
-            android:permission="app.revanced.manager.permission.PLUGIN_HOST" />
+            android:permission="app.revanced.manager.permission.DOWNLOADER_HOST" />
 
         <meta-data
-            android:name="app.revanced.manager.plugin.downloader.class"
-            android:value="app.revanced.manager.plugin.downloader.play.store.PlayStorePluginKt" />
+            android:name="app.revanced.manager.plugin.downloader.classes"
+            android:resource="@array/classes" />
     </application>
 
 </manifest>

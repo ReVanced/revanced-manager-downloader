@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    val packageName = "app.revanced.manager.plugin.downloader.apkmirror"
+    val packageName = "app.revanced.manager.downloader.apkmirror"
     namespace = packageName
     defaultConfig {
         applicationId = packageName

@@ -23,5 +23,5 @@ android {
 
 dependencies {
    implementation(libs.kotlinx.coroutines.core)
-   api(project(":arsclib"))
+   api(libs.arsclib)
 }

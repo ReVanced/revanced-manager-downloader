@@ -13,6 +13,7 @@ plugins {
 
 subprojects {
     repositories {
+        mavenLocal()
         google()
         mavenCentral()
         maven {
@@ -34,7 +35,7 @@ subprojects {
         apply(plugin = "signing")
 
         dependencies {
-            "compileOnly"(rootProject.libs.plugin.api)
+            "compileOnly"(rootProject.libs.manager.api)
         }
 
         configure<AppExtension> {

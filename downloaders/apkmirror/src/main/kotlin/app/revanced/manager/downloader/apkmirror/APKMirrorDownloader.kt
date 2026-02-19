@@ -1,13 +1,13 @@
 @file:Suppress("Unused")
 
-package app.revanced.manager.plugin.downloader.apkmirror
+package app.revanced.manager.downloader.apkmirror
 
 import android.net.Uri
-import app.revanced.manager.plugin.downloader.DownloadUrl
-import app.revanced.manager.plugin.downloader.Downloader
-import app.revanced.manager.plugin.downloader.download
-import app.revanced.manager.plugin.downloader.webview.runWebView
-import app.revanced.manager.plugin.shared.Merger
+import app.revanced.manager.downloader.DownloadUrl
+import app.revanced.manager.downloader.Downloader
+import app.revanced.manager.downloader.download
+import app.revanced.manager.downloader.webview.runWebView
+import app.revanced.manager.downloader.shared.Merger
 import java.net.URI
 import java.nio.file.Files
 import java.util.UUID
@@ -17,7 +17,7 @@ import kotlin.io.path.deleteRecursively
 import kotlin.io.path.outputStream
 
 @OptIn(ExperimentalPathApi::class)
-val ApkMirrorDownloader = Downloader<DownloadUrl> {
+val ApkMirrorDownloader = Downloader(R.string.app_name) {
     get { packageName, version ->
         runWebView("APKMirror") {
             download { url, _, userAgent ->

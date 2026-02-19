@@ -16,7 +16,6 @@ pluginManagement {
 }
 
 include(":shared")
-include(":arsclib")
 file("downloaders").listFiles()
     ?.forEach {
         include(":downloaders:${it.name}")

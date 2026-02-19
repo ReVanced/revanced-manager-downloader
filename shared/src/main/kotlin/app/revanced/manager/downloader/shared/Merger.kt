@@ -1,4 +1,4 @@
-package app.revanced.manager.plugin.shared
+package app.revanced.manager.downloader.shared
 
 import android.util.Log
 import com.reandroid.apk.APKLogger
