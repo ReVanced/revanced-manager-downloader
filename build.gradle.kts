@@ -38,33 +38,13 @@ android {
         compose = true
         aidl = true
     }
-}
-
-dependencies {
-    "compileOnly"(libs.manager.api)
-
-    implementation(libs.gplayapi)
-    implementation(libs.arsclib)
-
-    implementation(libs.ktor.core)
-    implementation(libs.ktor.logging)
-    implementation(libs.ktor.okhttp)
-
-    implementation(libs.compose.activity)
-    implementation(platform(libs.compose.bom))
-    implementation(libs.compose.ui)
-    implementation(libs.compose.ui.tooling)
-    implementation(libs.compose.material3)
-    implementation(libs.compose.webview)
-}
-
-configure<AppExtension> {
-    compileSdkVersion(35)
 
     defaultConfig {
         minSdk = 26
         targetSdk = 35
+        compileSdk = 35
         versionName = version.toString()
+        //noinspection WrongGradleMethod
         versionCode = versionName!!.filter { it.isDigit() }.toInt()
     }
 
@@ -101,6 +81,28 @@ configure<AppExtension> {
             outputFileName = "revanced-manager-downloaders-$version.apk"
         }
     }
+}
+
+kotlin {
+    jvmToolchain(17)
+}
+
+dependencies {
+    "compileOnly"(libs.manager.api)
+
+    implementation(libs.gplayapi)
+    implementation(libs.arsclib)
+
+    implementation(libs.ktor.core)
+    implementation(libs.ktor.logging)
+    implementation(libs.ktor.okhttp)
+
+    implementation(libs.compose.activity)
+    implementation(platform(libs.compose.bom))
+    implementation(libs.compose.ui)
+    implementation(libs.compose.ui.tooling)
+    implementation(libs.compose.material3)
+    implementation(libs.compose.webview)
 }
 
 tasks.register("assembleReleaseSignApk") {
