@@ -1,3 +1,10 @@
+# [1.1.0-dev.10](https://github.com/ReVanced/revanced-manager-downloader/compare/v1.1.0-dev.9...v1.1.0-dev.10) (2026-02-23)
+
+
+### Bug Fixes
+
+* Specify correct artifact paths ([1954601](https://github.com/ReVanced/revanced-manager-downloader/commit/1954601f334c2009316df83ab48a1b1245368b46))
+
 # [1.1.0-dev.9](https://github.com/ReVanced/revanced-manager-downloader/compare/v1.1.0-dev.8...v1.1.0-dev.9) (2026-02-19)
 
 
