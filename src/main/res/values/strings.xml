@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">ReVanced Manager: APKMirror downloader</string>
+    <string name="app_name">ReVanced Manager: Downloaders</string>
+    <string name="apkmirror">APKMirror</string>
+    <string name="play_store">Play Store</string>
 </resources>

@@ -1,36 +1,61 @@
+import com.android.build.gradle.AppExtension
+import com.android.build.gradle.internal.api.ApkVariantOutputImpl
+import org.gradle.plugins.signing.SigningExtension
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.kotlin.android)
-    publishing
+    alias(libs.plugins.compose.compiler)
+    `maven-publish`
     signing
 }
 
-dependencies {
-    compileOnly(libs.plugin.api)
+repositories {
+    mavenLocal()
+    google()
+    mavenCentral()
+    maven {
+        name = "GitHubPackages"
+        url = uri("https://maven.pkg.github.com/revanced/registry")
+        credentials {
+            username = providers.gradleProperty("gpr.user")
+                .getOrElse(System.getenv("GITHUB_ACTOR"))
+            password =
+                providers.gradleProperty("gpr.key").getOrElse(System.getenv("GITHUB_TOKEN"))
+        }
+    }
 }
-
 android {
-    val packageName = "app.revanced.manager.plugin.downloader.apkmirror"
-
+    val packageName = "app.revanced.manager.downloaders"
     namespace = packageName
-    compileSdk = 35
-
     defaultConfig {
         applicationId = packageName
+    }
+
+    buildFeatures {
+        compose = true
+        aidl = true
+    }
+
+    defaultConfig {
         minSdk = 26
         targetSdk = 35
+        compileSdk = 35
         versionName = version.toString()
+        //noinspection WrongGradleMethod
         versionCode = versionName!!.filter { it.isDigit() }.toInt()
     }
 
     buildTypes {
-        release {
+        getByName("release") {
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro",
+                "proguard-rules.pro"
             )
 
-            val keystoreFile = file("keystore.jks")
+            val keystoreFile = file("${rootDir}/keystore.jks")
             signingConfig =
                 if (keystoreFile.exists()) {
                     signingConfigs.create("release") {
@@ -40,7 +65,7 @@ android {
                         keyPassword = System.getenv("KEYSTORE_ENTRY_PASSWORD")
                     }
                 } else {
-                    signingConfigs["debug"]
+                    signingConfigs.getByName("debug")
                 }
         }
     }
@@ -50,39 +75,53 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-    kotlinOptions {
-        jvmTarget = "17"
-    }
-
     applicationVariants.all {
         outputs.all {
-            this as com.android.build.gradle.internal.api.ApkVariantOutputImpl
-
-            outputFileName = "${rootProject.name}-$version.apk"
+            this as ApkVariantOutputImpl
+            outputFileName = "revanced-manager-downloaders-$version.apk"
         }
     }
 }
 
-tasks {
-    val assembleReleaseSignApk by registering {
-        dependsOn("assembleRelease")
+kotlin {
+    jvmToolchain(17)
+}
 
-        val apk = layout.buildDirectory.file("outputs/apk/release/${rootProject.name}-$version.apk")
+dependencies {
+    "compileOnly"(libs.manager.api)
 
-        inputs.file(apk).withPropertyName("input")
-        outputs.file(apk.map { it.asFile.resolveSibling("${it.asFile.name}.asc") })
+    implementation(libs.gplayapi)
+    implementation(libs.arsclib)
 
-        doLast {
-            signing {
-                useGpgCmd()
-                sign(*inputs.files.files.toTypedArray())
-            }
+    implementation(libs.ktor.core)
+    implementation(libs.ktor.logging)
+    implementation(libs.ktor.okhttp)
+
+    implementation(libs.compose.activity)
+    implementation(platform(libs.compose.bom))
+    implementation(libs.compose.ui)
+    implementation(libs.compose.ui.tooling)
+    implementation(libs.compose.material3)
+    implementation(libs.compose.webview)
+}
+
+tasks.register("assembleReleaseSignApk") {
+    dependsOn("assembleRelease")
+
+    val apk =
+        layout.buildDirectory.file("outputs/apk/release/revanced-manager-downloaders-$version.apk")
+
+    inputs.file(apk).withPropertyName("input")
+    outputs.file(apk.map { it.asFile.resolveSibling("${it.asFile.name}.asc") })
+
+    doLast {
+        project.configure<SigningExtension> {
+            useGpgCmd()
+            sign(*inputs.files.files.toTypedArray())
         }
     }
+}
 
-    // Used by gradle-semantic-release-plugin.
-    // Tracking: https://github.com/KengoTODA/gradle-semantic-release-plugin/issues/435.
-    publish {
-        dependsOn(assembleReleaseSignApk)
-    }
+tasks.named("publish") {
+    dependsOn("assembleReleaseSignApk")
 }
