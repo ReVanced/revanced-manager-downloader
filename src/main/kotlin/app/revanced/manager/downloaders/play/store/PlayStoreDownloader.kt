@@ -53,7 +53,7 @@ val playStoreDownloader = Downloader(R.string.play_store) {
             }
 
             credentialProvider.retrieveCredentials()?.let { it to props }
-                ?: throw Exception("Could not get credentials")
+                ?: throw Exception("Could not get credentials") 
         }
         val authData = credentials.toAuthData(deviceProps)
 
