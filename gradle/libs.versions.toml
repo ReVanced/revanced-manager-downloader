@@ -1,35 +1,24 @@
 [versions]
-agp = "8.7.3"
-kotlin = "2.1.10"
-gplayapi = "3.4.4"
-kotlinx-coroutines-core = "1.9.0"
-ktor = "2.3.9"
+agp = "8.13.2"
+kotlin = "2.3.10"
+gplayapi = "3.5.8"
+ktor = "3.4.1"
+fragment = "1.8.9"
 
-compose-activity = "1.10.1"
-ui-tooling = "1.8.2"
-compose-bom = "2025.06.00"
-material3 = "1.3.2"
-compose-webview = "0.33.6"
+manager-api = "1.0.0-dev.2"
 
-plugin-api = "1.0.0"
+arsclib = "1.3.8"
 
 [libraries]
-kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines-core" }
-plugin-api = { group = "app.revanced", name = "revanced-manager-downloader-api", version.ref = "plugin-api" }
+manager-api = { group = "app.revanced", name = "revanced-manager-api", version.ref = "manager-api" }
+arsclib = { group = "io.github.reandroid", name = "ARSCLib", version.ref = "arsclib" }
 gplayapi = { group = "com.auroraoss", name = "gplayapi", version.ref = "gplayapi" }
-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
-compose-ui = { group = "androidx.compose.ui", name = "ui" }
-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "ui-tooling" }
-compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
-compose-activity = { group = "androidx.activity", name = "activity-compose", version.ref = "compose-activity" }
-compose-webview = { group = "io.github.kevinnzou", name = "compose-webview", version.ref = "compose-webview" }
+fragment = { group = "androidx.fragment", name = "fragment-ktx" ,version.ref = "fragment" }
 ktor-core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
 ktor-logging = { group = "io.ktor", name = "ktor-client-logging", version.ref = "ktor" }
 ktor-okhttp = { group = "io.ktor", name = "ktor-client-okhttp", version.ref = "ktor" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
-android-library = { id = "com.android.library", version.ref = "agp" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version = "2.0.21" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
-compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
