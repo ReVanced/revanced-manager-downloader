@@ -1,3 +1,7 @@
+## [1.1.1-dev.2](https://github.com/ReVanced/revanced-manager-downloader/compare/v1.1.1-dev.1...v1.1.1-dev.2) (2026-03-12)
+
+## [1.1.1-dev.1](https://github.com/ReVanced/revanced-manager-downloader/compare/v1.1.0...v1.1.1-dev.1) (2026-03-06)
+
 # [1.1.0](https://github.com/ReVanced/revanced-manager-downloader/compare/v1.0.0...v1.1.0) (2026-03-02)
 
 

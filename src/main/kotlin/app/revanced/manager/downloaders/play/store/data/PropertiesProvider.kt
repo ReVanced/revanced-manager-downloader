@@ -9,14 +9,9 @@ import javax.microedition.khronos.egl.EGL10
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.egl.EGLContext
 import android.os.Build
-import android.os.Parcelable
 import androidx.core.content.getSystemService
-import kotlinx.parcelize.Parcelize
 import java.util.Properties
 import javax.microedition.khronos.egl.EGLDisplay
-
-@Parcelize
-data class ParcelProperties(val value: Properties) : Parcelable
 
 object PropertiesProvider {
     fun createDeviceProperties(context: Context) = with(context) {

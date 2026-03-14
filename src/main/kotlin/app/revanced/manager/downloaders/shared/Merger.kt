@@ -31,7 +31,7 @@ class Merger {
         suspend fun merge(apkDir: Path): ApkModule {
             val closeables = mutableSetOf<Closeable>()
             try {
-                // Merge splits
+                // Merge split APKs
                 val merged = withContext(Dispatchers.Default) {
                     with(ApkBundle()) {
                         setAPKLogger(ArscLogger)

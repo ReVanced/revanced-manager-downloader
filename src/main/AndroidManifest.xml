@@ -11,7 +11,7 @@
         tools:targetApi="34">
 
         <activity
-            android:name=".play.store.ui.AuthActivity"
+            android:name=".play.store.ui.AuthFragment"
             android:exported="true"
             android:permission="app.revanced.manager.permission.DOWNLOADER_HOST"
             android:theme="@android:style/Theme.DeviceDefault" />

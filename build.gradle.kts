@@ -1,13 +1,10 @@
-import com.android.build.gradle.AppExtension
 import com.android.build.gradle.internal.api.ApkVariantOutputImpl
 import org.gradle.plugins.signing.SigningExtension
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.compose.compiler)
     `maven-publish`
     signing
 }
@@ -27,6 +24,7 @@ repositories {
         }
     }
 }
+
 android {
     val packageName = "app.revanced.manager.downloaders"
     namespace = packageName
@@ -34,15 +32,10 @@ android {
         applicationId = packageName
     }
 
-    buildFeatures {
-        compose = true
-        aidl = true
-    }
-
     defaultConfig {
         minSdk = 26
-        targetSdk = 35
-        compileSdk = 35
+        targetSdk = 36
+        compileSdk = 36
         versionName = version.toString()
         //noinspection WrongGradleMethod
         versionCode = versionName!!.filter { it.isDigit() }.toInt()
@@ -85,6 +78,12 @@ android {
 
 kotlin {
     jvmToolchain(17)
+    compilerOptions {
+        freeCompilerArgs.addAll(
+            "-Xexplicit-backing-fields",
+            "-Xcontext-parameters",
+        )
+    }
 }
 
 dependencies {
@@ -97,12 +96,7 @@ dependencies {
     implementation(libs.ktor.logging)
     implementation(libs.ktor.okhttp)
 
-    implementation(libs.compose.activity)
-    implementation(platform(libs.compose.bom))
-    implementation(libs.compose.ui)
-    implementation(libs.compose.ui.tooling)
-    implementation(libs.compose.material3)
-    implementation(libs.compose.webview)
+    implementation(libs.fragment)
 }
 
 tasks.register("assembleReleaseSignApk") {
