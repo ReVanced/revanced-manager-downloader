@@ -1,25 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
-    <uses-feature android:name="app.revanced.manager.downloader" />
-    <uses-permission android:name="android.permission.INTERNET" />
-
     <application
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         tools:targetApi="34">
-
-        <activity
-            android:name=".play.store.ui.AuthFragment"
-            android:exported="true"
-            android:permission="app.revanced.manager.permission.DOWNLOADER_HOST"
-            android:theme="@android:style/Theme.DeviceDefault" />
-
-        <service
-            android:name=".play.store.service.CredentialProviderService"
-            android:exported="true"
-            android:permission="app.revanced.manager.permission.DOWNLOADER_HOST" />
     </application>
 
 </manifest>
