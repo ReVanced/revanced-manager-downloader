@@ -2,6 +2,9 @@
 <resources>
     <string-array name="app.revanced.manager.downloader.classes">
         <item>app.revanced.manager.downloaders.apkmirror.APKMirrorDownloaderKt</item>
+        <!--
+        Play store login is currently broken. Disabling it for now.
         <item>app.revanced.manager.downloaders.play.store.PlayStoreDownloaderKt</item>
+        -->
     </string-array>
 </resources>

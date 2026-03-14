@@ -8,15 +8,14 @@ import android.util.Log
 import android.webkit.CookieManager
 import android.webkit.WebSettings
 import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import app.revanced.manager.downloaders.play.store.LOG_TAG
 import app.revanced.manager.downloaders.play.store.data.Credentials
 import app.revanced.manager.downloaders.play.store.data.Http
 import app.revanced.manager.downloaders.play.store.data.PropertiesProvider
-import app.revanced.manager.downloaders.play.store.data.saveCredentials
-import com.aurora.gplayapi.helpers.AuthValidator
-import com.kevinnzou.web.AccompanistWebViewClient
+import com.aurora.gplayapi.helpers.AuthHelper
 import io.ktor.client.request.headers
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
@@ -33,12 +32,12 @@ import kotlinx.coroutines.withContext
 import java.util.Locale
 import java.util.StringTokenizer
 
-class AuthActivityViewModel(app: Application) : AndroidViewModel(app) {
+class AuthFragmentViewModel(app: Application) : AndroidViewModel(app) {
     private val cookieManager = CookieManager.getInstance()!!
     private val activityResultCode =
         CompletableDeferred<Pair<Int, Intent?>>(parent = viewModelScope.coroutineContext.job)
 
-    val webViewClient = object : AccompanistWebViewClient() {
+    val webViewClient = object : WebViewClient() {
         override fun onPageFinished(view: WebView, url: String?) {
             super.onPageFinished(view, url)
 
@@ -68,6 +67,7 @@ class AuthActivityViewModel(app: Application) : AndroidViewModel(app) {
 
     private fun getAndSaveAasToken(email: String, oauthToken: String) = viewModelScope.launch {
         try {
+            // FIXME: this used to work, but it no longer does.
             val response = getAC2DMResponse(email, oauthToken)
             val aasToken = response["Token"] ?: throw Exception("AC2DM did not return a token")
             val credentials = Credentials(email, aasToken)
@@ -76,19 +76,23 @@ class AuthActivityViewModel(app: Application) : AndroidViewModel(app) {
 
             withContext(Dispatchers.IO) {
                 val authData = credentials.toAuthData(deviceProps)
-                val validator = AuthValidator(authData).using(Http)
+                val validator = AuthHelper.using(Http)
 
-                if (!validator.isValid()) throw Exception("Credential validation failed")
-                context.saveCredentials(credentials)
+                if (!validator.isValid(authData)) throw Exception("Credential validation failed")
             }
 
-            finishActivity(Activity.RESULT_OK)
+            val intent = Intent().apply {
+                putExtra(AuthFragment.CREDENTIALS_KEY, credentials)
+                putExtra(AuthFragment.PROPERTIES_KEY, deviceProps)
+            }
+
+            finishActivity(Activity.RESULT_OK, intent)
         } catch (e: CancellationException) {
             throw e
         } catch (e: Exception) {
             Log.e(LOG_TAG, "Could not get and save token", e)
-            finishActivity(AuthActivity.RESULT_FAILED, Intent().apply {
-                putExtra(AuthActivity.FAILURE_MESSAGE_KEY, e.message)
+            finishActivity(AuthFragment.RESULT_FAILED, Intent().apply {
+                putExtra(AuthFragment.FAILURE_MESSAGE_KEY, e.message)
             })
         }
     }
@@ -144,7 +148,6 @@ class AuthActivityViewModel(app: Application) : AndroidViewModel(app) {
             cacheMode = WebSettings.LOAD_DEFAULT
         }
     }
-
 
     companion object Constants {
         private const val OAUTH_COOKIE = "oauth_token"

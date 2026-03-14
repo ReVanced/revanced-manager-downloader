@@ -7,9 +7,10 @@ import app.revanced.manager.downloaders.shared.Merger
 import app.revanced.manager.downloaders.R
 import app.revanced.manager.downloaders.play.store.data.Credentials
 import app.revanced.manager.downloaders.play.store.data.Http
-import app.revanced.manager.downloaders.play.store.service.CredentialProviderService
-import app.revanced.manager.downloaders.play.store.ui.AuthActivity
-import com.aurora.gplayapi.data.models.File as GPlayFile
+import app.revanced.manager.downloaders.play.store.data.loadData
+import app.revanced.manager.downloaders.play.store.data.saveData
+import app.revanced.manager.downloaders.play.store.ui.AuthFragment
+import com.aurora.gplayapi.data.models.PlayFile
 import com.aurora.gplayapi.helpers.AppDetailsHelper
 import com.aurora.gplayapi.helpers.PurchaseHelper
 import io.ktor.client.request.url
@@ -22,39 +23,44 @@ import kotlin.io.path.deleteRecursively
 import kotlin.io.path.listDirectoryEntries
 import kotlin.io.path.outputStream
 
-private val allowedFileTypes = arrayOf(GPlayFile.FileType.BASE, GPlayFile.FileType.SPLIT)
+private val allowedFileTypes = arrayOf(PlayFile.Type.BASE, PlayFile.Type.SPLIT)
 const val LOG_TAG = "PlayStorePlugin"
 
 @Parcelize
 class GPlayApp(
-    val files: List<GPlayFile>
+    val files: List<PlayFile>
 ) : Parcelable
 
 @Suppress("Unused")
 @OptIn(ExperimentalPathApi::class)
 val playStoreDownloader = Downloader(R.string.play_store) {
+    val dataFile = dataDir.resolve("play_store.json")
+
     get { packageName, version ->
-        val (credentials, deviceProps) = useService<CredentialProviderService, Pair<Credentials, Properties>> { binder ->
-            val credentialProvider = ICredentialProvider.Stub.asInterface(binder)
-            val props = credentialProvider.properties.value
-            credentialProvider.retrieveCredentials()?.let { return@useService it to props }
+        var data: Pair<Credentials, Properties>? = null
+        try {
+            data = loadData(dataFile.inputStream())
+        } catch (_: Exception) {}
 
-            try {
-                requestStartActivity<AuthActivity>()
-            } catch (e: UserInteractionException.Activity.NotCompleted) {
-                if (e.resultCode == AuthActivity.RESULT_FAILED) throw Exception(
-                    "Login failed: ${
-                        e.intent?.getStringExtra(
-                            AuthActivity.FAILURE_MESSAGE_KEY
-                        )
-                    }"
-                )
-                throw e
-            }
+        if (data == null) @Suppress("DEPRECATION") try {
+            val result = requestStartFragment<AuthFragment>(null)!!
+            val creds = result.getParcelableExtra<Credentials>(AuthFragment.CREDENTIALS_KEY)!!
+            val props = result.getSerializableExtra(AuthFragment.PROPERTIES_KEY) as Properties
 
-            credentialProvider.retrieveCredentials()?.let { it to props }
-                ?: throw Exception("Could not get credentials") 
+            saveData(dataFile.outputStream(), creds, props)
+            data = creds to props
+        } catch (e: UserInteractionException.Activity.NotCompleted) {
+            if (e.resultCode == AuthFragment.RESULT_FAILED) throw Exception(
+                "Login failed: ${
+                    e.intent?.getStringExtra(
+                        AuthFragment.FAILURE_MESSAGE_KEY
+                    )
+                }"
+            )
+            throw e
         }
+
+        val (credentials, deviceProps) = data
         val authData = credentials.toAuthData(deviceProps)
 
         val app = try {
