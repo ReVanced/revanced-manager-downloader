@@ -1,3 +1,15 @@
+# [1.2.0-dev.1](https://github.com/ReVanced/revanced-manager-downloader/compare/v1.1.1-dev.2...v1.2.0-dev.1) (2026-03-14)
+
+
+### Bug Fixes
+
+* Cleanup manifest ([92bb555](https://github.com/ReVanced/revanced-manager-downloader/commit/92bb555efb8333f8d2c8e061b9a573971cf3202c))
+
+
+### Features
+
+* Migrate to new fragments API ([fc7a176](https://github.com/ReVanced/revanced-manager-downloader/commit/fc7a1766a1f79e6512e27572b96254c8018855c0))
+
 ## [1.1.1-dev.2](https://github.com/ReVanced/revanced-manager-downloader/compare/v1.1.1-dev.1...v1.1.1-dev.2) (2026-03-12)
 
 ## [1.1.1-dev.1](https://github.com/ReVanced/revanced-manager-downloader/compare/v1.1.0...v1.1.1-dev.1) (2026-03-06)
