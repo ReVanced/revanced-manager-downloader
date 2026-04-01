@@ -1,6 +1,6 @@
 [versions]
 agp = "8.13.2"
-kotlin = "2.3.10"
+kotlin = "2.3.20"
 gplayapi = "3.5.8"
 ktor = "3.4.1"
 fragment = "1.8.9"
