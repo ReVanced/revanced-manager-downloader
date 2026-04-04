@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="app.revanced.manager.downloader.classes">
-        <item>app.revanced.manager.downloaders.apkmirror.APKMirrorDownloaderKt</item>
+        <item>app.revanced.manager.downloaders.charm.CharmDownloaderKt</item>
         <!--
         Play store login is currently broken. Disabling it for now.
         <item>app.revanced.manager.downloaders.play.store.PlayStoreDownloaderKt</item>

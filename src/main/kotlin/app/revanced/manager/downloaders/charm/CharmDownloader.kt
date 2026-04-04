@@ -1,26 +1,28 @@
 @file:Suppress("Unused")
 
-package app.revanced.manager.downloaders.apkmirror
+package app.revanced.manager.downloaders.charm
 
-import android.net.Uri
 import app.revanced.manager.downloader.DownloadUrl
 import app.revanced.manager.downloader.Downloader
 import app.revanced.manager.downloader.download
 import app.revanced.manager.downloader.webview.runWebView
+
 import app.revanced.manager.downloaders.R
 import app.revanced.manager.downloaders.shared.Merger
-import java.net.URI
+
 import java.nio.file.Files
 import java.util.UUID
 import java.util.zip.ZipFile
 import kotlin.io.path.ExperimentalPathApi
 import kotlin.io.path.deleteRecursively
+import kotlin.io.path.inputStream
 import kotlin.io.path.outputStream
 
 @OptIn(ExperimentalPathApi::class)
-val ApkMirrorDownloader = Downloader(R.string.apkmirror) {
+val CharmDownloader = Downloader(R.string.charm) {
+
     get { packageName, version ->
-        runWebView("APKMirror") {
+        runWebView("Charm") {
             download { url, _, userAgent ->
                 finish(
                     DownloadUrl(
@@ -29,46 +31,54 @@ val ApkMirrorDownloader = Downloader(R.string.apkmirror) {
                     )
                 )
             }
-
-            Uri.Builder()
-                .scheme("https")
-                .authority("www.apkmirror.com")
-                .appendQueryParameter("post_type", "app_release")
-                .appendQueryParameter("searchtype", "apk")
-                .appendQueryParameter("s", version?.let { "$packageName $it" } ?: packageName)
-                .appendQueryParameter("bundles%5B%5D" /* bundles[] */, "apk_files")
-                .toString()
+            "https://charm-cat.github.io/#$packageName"
         } to version
     }
 
     download { downloadUrl, outputStream ->
-        val workingDir = Files.createTempDirectory("apkmirror_dl")
+        val workingDir = Files.createTempDirectory("charm_dl")
         try {
-            if (URI(downloadUrl.url).path.substringAfterLast('/').endsWith(".apk")) {
-                val (inputStream, size) = downloadUrl.toDownloadResult()
-                inputStream.use {
+            val downloadedFile = workingDir.resolve(UUID.randomUUID().toString())
+            val (inputStream, size) = downloadUrl.toDownloadResult()
+
+            downloadedFile.outputStream().use { output ->
+                inputStream.use { stream ->
                     if (size != null) reportSize(size)
-                    it.copyTo(outputStream)
+                    stream.copyTo(output, bufferSize = 64 * 1024)
                 }
-            } else {
-                val downloadedFile = workingDir.resolve(UUID.randomUUID().toString()).also {
-                    it.outputStream().use { output ->
-                        downloadUrl.toDownloadResult().first.copyTo(output)
-                    }
+            }
+
+            var isBundle = false
+            try {
+                ZipFile(downloadedFile.toFile()).use { zip ->
+                    isBundle = zip.entries().asSequence().any { it.name.endsWith(".apk") }
                 }
+            } catch (e: Exception) {
+            }
+
+            if (isBundle) {
                 val xapkWorkingDir = workingDir.resolve("xapk").also { it.toFile().mkdirs() }
 
-                ZipFile(downloadedFile.toString()).use { zip ->
+                ZipFile(downloadedFile.toFile()).use { zip ->
                     zip.entries().asSequence().forEach { entry ->
-                        xapkWorkingDir.resolve(entry.name).also { it.parent.toFile().mkdirs() }.also { outputFile ->
+                        if (!entry.isDirectory) {
+                            val outputFile = xapkWorkingDir.resolve(entry.name)
+                            
+                            outputFile.parent.toFile().mkdirs()
+
                             zip.getInputStream(entry).use { input ->
                                 Files.copy(input, outputFile)
                             }
                         }
                     }
                 }
-
+                
                 Merger.merge(xapkWorkingDir).writeApk(outputStream)
+
+            } else {
+                downloadedFile.inputStream().use { stream ->
+                    stream.copyTo(outputStream, bufferSize = 64 * 1024)
+                }
             }
         } finally {
             workingDir.deleteRecursively()
