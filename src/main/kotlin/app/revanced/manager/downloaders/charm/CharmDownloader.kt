@@ -51,7 +51,7 @@ val CharmDownloader = Downloader(R.string.charm) {
             var isBundle = false
             try {
                 ZipFile(downloadedFile.toFile()).use { zip ->
-                    isBundle = zip.entries().asSequence().any { it.name.endsWith(".apk") }
+                    isBundle = zip.getEntry("AndroidManifest.xml") == null
                 }
             } catch (e: Exception) {
             }
@@ -61,7 +61,7 @@ val CharmDownloader = Downloader(R.string.charm) {
 
                 ZipFile(downloadedFile.toFile()).use { zip ->
                     zip.entries().asSequence().forEach { entry ->
-                        if (!entry.isDirectory) {
+                        if (!entry.isDirectory && entry.name.endsWith(".apk")) {
                             val outputFile = xapkWorkingDir.resolve(entry.name)
                             
                             outputFile.parent.toFile().mkdirs()
