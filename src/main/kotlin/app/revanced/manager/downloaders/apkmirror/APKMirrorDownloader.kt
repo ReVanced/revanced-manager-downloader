@@ -16,8 +16,12 @@ import java.util.zip.ZipFile
 import kotlin.io.path.ExperimentalPathApi
 import kotlin.io.path.deleteRecursively
 import kotlin.io.path.outputStream
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalPathApi::class)
+@OptIn(ExperimentalPathApi::class, DelicateCoroutinesApi::class)
 val ApkMirrorDownloader = Downloader(R.string.apkmirror) {
     get { packageName, version ->
         runWebView("APKMirror") {
@@ -42,36 +46,57 @@ val ApkMirrorDownloader = Downloader(R.string.apkmirror) {
     }
 
     download { downloadUrl, outputStream ->
-        val workingDir = Files.createTempDirectory("apkmirror_dl")
-        try {
-            if (URI(downloadUrl.url).path.substringAfterLast('/').endsWith(".apk")) {
-                val (inputStream, size) = downloadUrl.toDownloadResult()
-                inputStream.use {
-                    if (size != null) reportSize(size)
-                    it.copyTo(outputStream)
+        val isApk = URI(downloadUrl.url).path.substringAfterLast('/').endsWith(".apk")
+        if (isApk) {
+            val (inputStream, size) = downloadUrl.toDownloadResult()
+            inputStream.use { stream ->
+                if (size != null) reportSize(size)
+                val buffer = ByteArray(64 * 1024)
+                var bytes = stream.read(buffer)
+                while (bytes >= 0) {
+                    outputStream.write(buffer, 0, bytes)
+                    bytes = stream.read(buffer)
                 }
-            } else {
-                val downloadedFile = workingDir.resolve(UUID.randomUUID().toString()).also {
-                    it.outputStream().use { output ->
-                        downloadUrl.toDownloadResult().first.copyTo(output)
-                    }
-                }
-                val xapkWorkingDir = workingDir.resolve("xapk").also { it.toFile().mkdirs() }
-
-                ZipFile(downloadedFile.toString()).use { zip ->
-                    zip.entries().asSequence().forEach { entry ->
-                        xapkWorkingDir.resolve(entry.name).also { it.parent.toFile().mkdirs() }.also { outputFile ->
-                            zip.getInputStream(entry).use { input ->
-                                Files.copy(input, outputFile)
+            }
+        } else {
+            val workingDir: java.nio.file.Path = Files.createTempDirectory("apkmirror_dl")
+            try {
+                val downloadedFile: java.nio.file.Path = workingDir.resolve(UUID.randomUUID().toString()).also { file ->
+                    file.outputStream().use { output ->
+                        val (inputStream, size) = downloadUrl.toDownloadResult()
+                        inputStream.use { stream ->
+                            if (size != null) reportSize(size)
+                            val buffer = ByteArray(64 * 1024)
+                            var bytes = stream.read(buffer)
+                            while (bytes >= 0) {
+                                output.write(buffer, 0, bytes)
+                                bytes = stream.read(buffer)
                             }
                         }
                     }
                 }
+                val xapkWorkingDir: java.nio.file.Path = workingDir.resolve("xapk").also { it.toFile().mkdirs() }
+                ZipFile(downloadedFile.toFile()).use { zip ->
+                    val rawApkEntries = zip.entries().asSequence()
+                        .filter { !it.isDirectory && it.name.endsWith(".apk") }
+                        .map { it.name }
+                        .toList()
 
-                Merger.merge(xapkWorkingDir).writeApk(outputStream)
+                    for (split in rawApkEntries) {
+                        val entry = zip.getEntry(split)
+                        if (entry != null) {
+                            val outputFile = xapkWorkingDir.resolve(entry.name)
+                            outputFile.parent.toFile().mkdirs()
+                            zip.getInputStream(entry).use { input -> Files.copy(input, outputFile) }
+                        }
+                    }
+                }
+                Merger.mergeAndWrite(xapkWorkingDir, outputStream)
+            } finally {
+                GlobalScope.launch(Dispatchers.IO) {
+                    try { workingDir.deleteRecursively() } catch (e: Exception) {}
+                }
             }
-        } finally {
-            workingDir.deleteRecursively()
         }
     }
 }
