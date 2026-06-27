@@ -36,42 +36,49 @@ val ApkMirrorDownloader = Downloader(R.string.apkmirror) {
                 .appendQueryParameter("post_type", "app_release")
                 .appendQueryParameter("searchtype", "apk")
                 .appendQueryParameter("s", version?.let { "$packageName $it" } ?: packageName)
-                .appendQueryParameter("bundles%5B%5D" /* bundles[] */, "apk_files")
+                .appendQueryParameter("bundles%5B%5D", "apk_files")
                 .toString()
         } to version
     }
 
     download { downloadUrl, outputStream ->
-        val workingDir = Files.createTempDirectory("apkmirror_dl")
+        val workingPath = Files.createTempDirectory("apkmirror_dl")
+
         try {
-            if (URI(downloadUrl.url).path.substringAfterLast('/').endsWith(".apk")) {
-                val (inputStream, size) = downloadUrl.toDownloadResult()
-                inputStream.use {
-                    if (size != null) reportSize(size)
-                    it.copyTo(outputStream)
+            val isApk = URI(downloadUrl.url).path.substringAfterLast('/').endsWith(".apk")
+            if (isApk) {
+                val (inputStream, _) = downloadUrl.toDownloadResult()
+                inputStream.use { stream ->
+                    stream.copyTo(outputStream, 128 * 1024)
                 }
             } else {
-                val downloadedFile = workingDir.resolve(UUID.randomUUID().toString()).also {
-                    it.outputStream().use { output ->
-                        downloadUrl.toDownloadResult().first.copyTo(output)
+                val downloadedZipPath = workingPath.resolve(UUID.randomUUID().toString())
+                
+                downloadedZipPath.outputStream().use { output ->
+                    val (inputStream, _) = downloadUrl.toDownloadResult()
+                    inputStream.use { stream ->
+                        stream.copyTo(output, 128 * 1024)
                     }
                 }
-                val xapkWorkingDir = workingDir.resolve("xapk").also { it.toFile().mkdirs() }
 
-                ZipFile(downloadedFile.toString()).use { zip ->
-                    zip.entries().asSequence().forEach { entry ->
-                        xapkWorkingDir.resolve(entry.name).also { it.parent.toFile().mkdirs() }.also { outputFile ->
-                            zip.getInputStream(entry).use { input ->
-                                Files.copy(input, outputFile)
+                val xapkWorkingPath = workingPath.resolve("xapk").also { it.toFile().mkdirs() }
+
+                ZipFile(downloadedZipPath.toFile()).use { zip ->
+                    zip.entries().asSequence()
+                        .filter { !it.isDirectory && it.name.endsWith(".apk") }
+                        .forEach { entry ->
+                            xapkWorkingPath.resolve(entry.name).also { it.parent.toFile().mkdirs() }.let { extractedApkPath ->
+                                zip.getInputStream(entry).use { input -> 
+                                    Files.copy(input, extractedApkPath) 
+                                }
                             }
                         }
-                    }
                 }
 
-                Merger.merge(xapkWorkingDir).writeApk(outputStream)
+                Merger.mergeAndWrite(xapkWorkingPath, outputStream)
             }
         } finally {
-            workingDir.deleteRecursively()
+            runCatching { workingPath.deleteRecursively() }
         }
     }
 }
