@@ -89,7 +89,6 @@ kotlin {
 dependencies {
     "compileOnly"(libs.manager.api)
 
-    implementation(libs.gplayapi)
     implementation(libs.arsclib)
 
     implementation(libs.ktor.core)
